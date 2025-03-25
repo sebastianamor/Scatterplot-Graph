@@ -35,57 +35,111 @@ function processData(dataset) {
       doping: d.Doping
     };
   });
-   
-  
-  
-  
+
   // Escalas
   const x = d3.scaleTime()
     .domain([d3.min(formattedData, d => d.year), d3.max(formattedData, d => d.year)])
     .range([0, width]);
 
   const y = d3.scaleLinear()
-    .domain([d3.max(formattedData, d => d.time), d3.min(formattedData, d => d.time)]) // Invertido para que el menor tiempo esté arriba
+    .domain([d3.max(formattedData, d => d.time), d3.min(formattedData, d => d.time)])
     .range([height, 0]);
 
-  // Ejes
+  // Formateador para el eje X (años)
+  const formatYear = d3.timeFormat("%Y");
+
+  // Eje X con ticks cada 2 años
   g.append("g")
     .attr("id", "x-axis")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x));
+    .call(
+      d3.axisBottom(x)
+        .tickFormat(formatYear)
+        .ticks(d3.timeYear.every(2))
+    );
 
+  // Eje Y con formato mm:ss
   g.append("g")
     .attr("id", "y-axis")
-    .call(d3.axisLeft(y).tickFormat(d => `${Math.floor(d / 60)}:${String(d % 60).padStart(2, "0")}`)); // Mostrar mm:ss
+    .call(
+      d3.axisLeft(y)
+        .tickFormat(d => {
+          const mins = Math.floor(d / 60);
+          const secs = Math.floor(d % 60);
+          return `${mins}:${secs < 10 ? "0" + secs : secs}`;
+        })
+    );
+// Puntos (círculos)
+g.selectAll(".dot")
+  .data(formattedData)
+  .enter()
+  .append("circle")
+  .attr("class", "dot")
+  .attr("data-xvalue", d => d.year.getFullYear()) // Guardar solo el año (número)
+  .attr("data-yvalue", d => d.time)
+  .attr("cx", d => x(d.year))
+  .attr("cy", d => y(d.time))
+  .attr("r", 5)
+  .attr("fill", d => d.doping ? "red" : "#0de21a")
+  
+     // Dentro del evento mouseover en tu código actual:
+.on("mouseover", function(event, d) {
+  const originalData = dataset.find(item => 
+    new Date(item.Year, 0, 1).getTime() === d.year.getTime() && 
+    item.Time === `${Math.floor(d.time/60)}:${String(d.time%60).padStart(2,"0")}`
+  );
+  
+  tooltip.style("opacity", 0.9)
+    .html(`
+      <strong>Año:</strong> ${d.year.getFullYear()}<br>
+      <strong>Tiempo:</strong> ${Math.floor(d.time/60)}:${String(d.time%60).padStart(2,"0")}<br>
+      <strong>Nombre:</strong> ${originalData.Name}<br>
+      <strong>Nacionalidad:</strong> ${originalData.Nationality}<br>
+      <strong>Doping:</strong> ${originalData.Doping || "Ninguna alegación"}<br>
+      ${originalData.URL ? `<a href="${originalData.URL}" target="_blank">🔗 Más info</a>` : ''}
+    `)
+    .attr("data-year", d.year.getFullYear())
+    .style("left", `${event.pageX + 15}px`)
+    .style("top", `${event.pageY - 15}px`);
+}) 
+ 
+  
+ 
 
-  // Puntos
-  g.selectAll(".dot")
-    .data(formattedData)
-    .enter()
-    .append("circle")
-    .attr("class", "dot")
-    .attr("data-xvalue", d => d.year.toISOString()) // ✅ Convertir el año a ISO
-    .attr("data-yvalue", d => d.time) // ✅ Guardar el tiempo en segundos directamente
-    .attr("cx", d => x(d.year))
-    .attr("cy", d => y(d.time))
-    .attr("r", 5)
-    .attr("fill", d => d.doping ? "red" : "#0de21a") // Resaltar si hubo doping
-    .on("mouseover", function (event, d) {
-      tooltip.style("opacity", 0.9)
-        .html(`Año: ${d.year.getFullYear()}<br>Tiempo: ${Math.floor(d.time / 60)}:${String(d.time % 60).padStart(2, "0")}`)
-        .attr("data-xvalue", d.year.toISOString()) // ✅ Tooltip con formato ISO
-        .attr("data-yvalue", d.time) // ✅ Tooltip con el valor en segundos
-        .style("left", `${event.pageX + 5}px`)
-        .style("top", `${event.pageY - 38}px`);
-    })
-    .on("mouseout", () => tooltip.style("opacity", 0));
-  
-  
-  const xAxis = d3.axisBottom(x)
-  .ticks(d3.timeYear.every(2)) // Muestra un tick cada 2 años
-  .tickFormat(d3.format("d")); // Formatea el año como número entero (sin decimales)
+// Crear leyenda
+const legend = svg.append("g")
+  .attr("id", "legend")
+  .attr("transform", `translate(${width + margin.left + 20}, ${margin.top})`);
 
-  
+// Añadir rectángulos de colores
+legend.selectAll("legend-rect")
+  .data(["Doping", "No Doping"])
+  .enter()
+  .append("rect")
+  .attr("x", 0)
+  .attr("y", (d, i) => i * 25)
+  .attr("width", 20)
+  .attr("height", 20)
+  .attr("fill", d => d === "Doping" ? "red" : "#0de21a");
+
+// Añadir texto descriptivo
+legend.selectAll("legend-text")
+  .data(["Doping", "No Doping"])
+  .enter()
+  .append("text")
+  .attr("x", -59)
+  .attr("y", (d, i) => i * 25 + 15)
+  .text(d => d)
+  .style("font-size", "12px")
+  .attr("alignment-baseline", "middle");
+
+// Añadir título descriptivo
+legend.append("text")
+  .attr("x", -50)
+  .attr("y", -10)
+  .text("Leyenda:")
+  .style("font-weight", "bold")
+  .style("font-size", "14px"); 
 }
 
 // Obtener los datos y graficar
