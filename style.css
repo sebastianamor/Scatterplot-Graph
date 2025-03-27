@@ -1,124 +1,124 @@
 body {
-    background-image: url("https://t4.ftcdn.net/jpg/09/07/55/57/360_F_907555731_BEfVfzowzuXwhiLJHIEKYKWHFzG846rg.jpg");
-    background-color: #cccccc;
-   }
-   
+  background-image: url("https://t4.ftcdn.net/jpg/09/07/55/57/360_F_907555731_BEfVfzowzuXwhiLJHIEKYKWHFzG846rg.jpg");
+  background-color: #cccccc;
+ }
+ 
 /* Estilos generales del SVG */
 svg {
-  display: block;
-  margin: 0 auto;
-  background-color: #f9f9f9;
-  font-family: 'Arial', sans-serif;
+display: block;
+margin: 0 auto;
+background-color: #f9f9f9;
+font-family: 'Arial', sans-serif;
 }
 
 /* Estilo del título principal */
 #title {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #333;
+text-align: center;
+font-size: 24px;
+margin-bottom: 10px;
+color: #333;
 }
 
 /* Estilo de los ejes */
 .axis {
-  font-size: 12px;
+font-size: 12px;
 }
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #777;
-  shape-rendering: crispEdges;
+fill: none;
+stroke: #777;
+shape-rendering: crispEdges;
 }
 
 .axis text {
-  fill: #555;
+fill: #555;
 }
 
 /* Estilo de los puntos (círculos) */
 .dot {
-  stroke: #fff;
-  stroke-width: 1px;
-  opacity: 0.8;
-  transition: opacity 0.3s, r 0.3s;
+stroke: #fff;
+stroke-width: 1px;
+opacity: 0.8;
+transition: opacity 0.3s, r 0.3s;
 }
 
 .dot:hover {
-  opacity: 1;
-  r: 7;
+opacity: 1;
+r: 7;
 }
 
 
 /* Estilo de la leyenda */
 #legend {
-  font-size: 13px;
+font-size: 13px;
 }
 
 #legend rect {
-  stroke: #fff;
-  stroke-width: 1px;
+stroke: #fff;
+stroke-width: 1px;
 }
 
 #legend text {
-  fill: #555;
-  alignment-baseline: middle;
+fill: #555;
+alignment-baseline: middle;
 }
 
 #legend > text:first-child {
-  font-weight: bold;
-  font-size: 14px;
+font-weight: bold;
+font-size: 14px;
 }
 
 /* Estilo para el grid (opcional) */
 .grid line {
-  stroke: #e0e0e0;
-  stroke-opacity: 0.7;
-  shape-rendering: crispEdges;
+stroke: #e0e0e0;
+stroke-opacity: 0.7;
+shape-rendering: crispEdges;
 }
 
 .grid path {
-  stroke-width: 0;
+stroke-width: 0;
 }
 
 #tooltip {
-  position: absolute;
-  padding: 15px;
-  background: white;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  pointer-events: none;
-  font-size: 14px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  max-width: 300px;
-  line-height: 1.6;
-  z-index: 100;
+position: absolute;
+padding: 15px;
+background: white;
+border: 2px solid #ddd;
+border-radius: 8px;
+pointer-events: none;
+font-size: 14px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+max-width: 300px;
+line-height: 1.6;
+z-index: 100;
 }
 
 #tooltip strong {
-  color: #333;
-  font-weight: 600;
+color: #333;
+font-weight: 600;
 }
 
 #tooltip a {
-  color: #1a73e8;
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 8px;
+color: #1a73e8;
+text-decoration: none;
+display: inline-block;
+margin-top: 8px;
 }
 
 #tooltip a:hover {
-  text-decoration: underline;
+text-decoration: underline;
 }
 
 #tooltip::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 20px;
-  border-width: 10px 10px 0;
-  border-style: solid;
-  border-color: white transparent;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+content: "";
+position: absolute;
+bottom: -10px;
+left: 20px;
+border-width: 10px 10px 0;
+border-style: solid;
+border-color: white transparent;
+filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
 
 
@@ -126,16 +126,16 @@ svg {
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
-  #title {
-    font-size: 20px;
-  }
-  
-  .axis {
-    font-size: 10px;
-  }
-  
-  #tooltip {
-    font-size: 12px;
-    max-width: 150px;
-  }
+#title {
+  font-size: 20px;
+}
+
+.axis {
+  font-size: 10px;
+}
+
+#tooltip {
+  font-size: 12px;
+  max-width: 150px;
+}
 }
